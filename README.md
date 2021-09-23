@@ -8,7 +8,7 @@ This project creates a blockchain example.
 
 This project leverages python 3.7.9 with the following packages:
 
-* [Streamlit](https://streamlit.io/) - A service for building conversational interfaces into any application using voice and text.
+* [Streamlit](https://streamlit.io/) - A platform to quickly share python code over the web.
 
 On the terminal, under the conda dev environment, install the following:
 
