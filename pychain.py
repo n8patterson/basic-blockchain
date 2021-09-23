@@ -1,5 +1,10 @@
-# PyChain Ledger
-################################################################################
+"""PyChain Ledger
+
+Example blockchain application
+
+Example:
+    $ streamlit run pychain.py
+"""
 
 # Imports
 import streamlit as st
@@ -11,12 +16,48 @@ import hashlib
 
 @dataclass
 class Record:
+    """A class used to represent the data/record inside of a block
+
+    ...
+
+    Attributes
+    ----------
+    sender : str
+        a  string to identify the sender
+    receiver : str
+        a  string to identify the receiver
+    amount : float
+        a  float to identify the amount of the record
+    """
+
     sender: str
     receiver: str
     amount: float
 
+
 @dataclass
 class Block:
+    """A class used to represent a block in the blockchain
+
+    Attributes
+    ----------
+    record : Record
+        the data/record of the block
+    creator_id : int
+        id for the name of the creator
+    prev_hash : str
+        link to the previous hash in the blockchain
+    timestamp : str
+        the current time of when the block was created in UTC
+    nonce : str
+        the number added to the hash/block "number only used once"
+
+    Methods
+    -------
+    hash_block(self)
+        computes the hash of the current block
+    """
+
     record: Record
     creator_id: int
     prev_hash: str = 0
@@ -24,6 +65,24 @@ class Block:
     nonce: str = 0
 
     def hash_block(self):
+        """Determine the hash of the current block
+
+        The current block hash is based on:
+            - record
+            - creator_id
+            - timestamp
+            - pev_hash
+            - nonce
+
+        Parameters
+        ----------
+            self ([Block]): current block
+
+        Returns
+        -------
+            a hex value for the current hash of this block
+        """
+
         sha = hashlib.sha256()
 
         record = str(self.record).encode()
@@ -46,10 +105,43 @@ class Block:
 
 @dataclass
 class PyChain:
+    """A class used to represent a blockchain
+
+    Attributes
+    ----------
+    chain : List[Block]
+        a representation of a blockchain with Blocks
+    difficulty : int
+        difficulty for computing the next block/hash
+
+    Methods
+    -------
+    proof_of_work(self)
+        calculates the next hash given a difficulty and a candidate block and returns a block to be added to the blockchain
+    add_block(self)
+        adds a block to the chain(blockchain)
+    is_valid(self)
+        determines if the entire blockchain is valid, i.e. all have correct hash values
+    """
+
     chain: List[Block]
     difficulty: int = 4
 
     def proof_of_work(self, block):
+        """Determine the hash of the current block
+
+        The candidate block is created based on:
+            - difficluty
+
+        Parameters
+        ----------
+            self (PyChain): current PyChain
+            block ([Block]): candidate block to be added to the blockchain
+
+        Returns
+        -------
+            a new block with correct number set for nonce to help compute the winning hash
+        """
 
         calculated_hash = block.hash_block()
 
@@ -65,10 +157,34 @@ class PyChain:
         return block
 
     def add_block(self, candidate_block):
+        """Adds a new block to this blockchain using poof_of_work()
+
+        A new block is added by using:
+            - proof_of_work()
+
+        Parameters
+        ----------
+            self (PyChain): current PyChain
+            block ([Block]): candidate block to be added to the blockchain
+        """
+
         block = self.proof_of_work(candidate_block)
         self.chain += [block]
 
     def is_valid(self):
+        """Determines if this entire blockchain is valid
+
+        Starts with the first block in the chain and iterates over the entire chain comparing hash values
+
+        Parameters
+        ----------
+            self (PyChain): current PyChain
+
+        Returns
+        -------
+            a if this blockchain is valid
+        """
+        
         block_hash = self.chain[0].hash_block()
 
         for block in self.chain[1:]:
@@ -124,7 +240,6 @@ if st.button("Add Block"):
     st.balloons()
 
 ################################################################################
-# Streamlit Code (continues)
 
 st.markdown("## The PyChain Ledger")
 
@@ -143,31 +258,3 @@ st.sidebar.write(selected_block)
 
 if st.button("Validate Chain"):
     st.write(pychain.is_valid())
-
-################################################################################
-# Step 4:
-# Test the PyChain Ledger by Storing Records
-
-# Test your complete `PyChain` ledger and user interface by running your
-# Streamlit application and storing some mined blocks in your `PyChain` ledger.
-# Then test the blockchain validation process by using your `PyChain` ledger.
-# To do so, complete the following steps:
-
-# 1. In the terminal, navigate to the project folder where you've coded the
-#  Challenge.
-
-# 2. In the terminal, run the Streamlit application by
-# using `streamlit run pychain.py`.
-
-# 3. Enter values for the sender, receiver, and amount, and then click the "Add
-# Block" button. Do this several times to store several blocks in the ledger.
-
-# 4. Verify the block contents and hashes in the Streamlit drop-down menu.
-# Take a screenshot of the Streamlit application page, which should detail a
-# blockchain that consists of multiple blocks. Include the screenshot in the
-# `README.md` file for your Challenge repository.
-
-# 5. Test the blockchain validation process by using the web interface.
-# Take a screenshot of the Streamlit application page, which should indicate
-# the validity of the blockchain. Include the screenshot in the `README.md`
-# file for your Challenge repository.
