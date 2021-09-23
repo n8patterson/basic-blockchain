@@ -1,27 +1,6 @@
 # PyChain Ledger
 ################################################################################
-# You’ll make the following updates to the provided Python file for this
-# Challenge, which already contains the basic `PyChain` ledger structure that
-# you created throughout the module:
 
-# Step 1: Create a Record Data Class
-# * Create a new data class named `Record`. This class will serve as the
-# blueprint for the financial transaction records that the blocks of the ledger
-# will store.
-
-# Step 2: Modify the Existing Block Data Class to Store Record Data
-# * Change the existing `Block` data class by replacing the generic `data`
-# attribute with a `record` attribute that’s of type `Record`.
-
-# Step 3: Add Relevant User Inputs to the Streamlit Interface
-# * Create additional user input areas in the Streamlit application. These
-# input areas should collect the relevant information for each financial record
-# that you’ll store in the `PyChain` ledger.
-
-# Step 4: Test the PyChain Ledger by Storing Records
-# * Test your complete `PyChain` ledger.
-
-################################################################################
 # Imports
 import streamlit as st
 from dataclasses import dataclass
@@ -35,17 +14,6 @@ class Record:
     sender: str
     receiver: str
     amount: float
-
-################################################################################
-# Step 2:
-# Modify the Existing Block Data Class to Store Record Data
-
-# Rename the `data` attribute in your `Block` class to `record`, and then set
-# it to use an instance of the new `Record` class that you created in the
-# previous section. To do so, complete the following steps:
-# 1. In the `Block` class, rename the `data` attribute to `record`.
-# 2. Set the data type of the `record` attribute to `Record`.
-
 
 @dataclass
 class Block:
@@ -117,8 +85,6 @@ class PyChain:
 # Streamlit Code
 
 # Adds the cache decorator for Streamlit
-
-
 @st.cache(allow_output_mutation=True)
 def setup():
     print("Initializing Chain")
@@ -131,45 +97,25 @@ st.markdown("## Store a Transaction Record in the PyChain")
 pychain = setup()
 
 ################################################################################
-# Step 3:
-# Add Relevant User Inputs to the Streamlit Interface
 
-# Code additional input areas for the user interface of your Streamlit
-# application. Create these input areas to capture the sender, receiver, and
-# amount for each transaction that you’ll store in the `Block` record.
-# To do so, complete the following steps:
-# 1. Delete the `input_data` variable from the Streamlit interface.
-# 2. Add an input area where you can get a value for `sender` from the user.
-# 3. Add an input area where you can get a value for `receiver` from the user.
-# 4. Add an input area where you can get a value for `amount` from the user.
-# 5. As part of the Add Block button functionality, update `new_block` so that `Block` consists of an attribute named `record`, which is set equal to a `Record` that contains the `sender`, `receiver`, and `amount` values. The updated `Block`should also include the attributes for `creator_id` and `prev_hash`.
+# Input area where you can get a value for `sender` from the user.
+sender = st.text_input("Sender")
 
-# @TODO:
-# Delete the `input_data` variable from the Streamlit interface.
-input_data = st.text_input("Block Data")
+# Input area where you can get a value for `receiver` from the user.
+receiver = st.text_input("Receiver")
 
-# @TODO:
-# Add an input area where you can get a value for `sender` from the user.
-# YOUR CODE HERE
-
-# @TODO:
-# Add an input area where you can get a value for `receiver` from the user.
-# YOUR CODE HERE
-
-# @TODO:
-# Add an input area where you can get a value for `amount` from the user.
-# YOUR CODE HERE
+# Input area where you can get a value for `amount` from the user.
+amount = st.text_input("Amount")
 
 if st.button("Add Block"):
     prev_block = pychain.chain[-1]
     prev_block_hash = prev_block.hash_block()
 
-    # @TODO
     # Update `new_block` so that `Block` consists of an attribute named `record`
     # which is set equal to a `Record` that contains the `sender`, `receiver`,
     # and `amount` values
     new_block = Block(
-        data=input_data,
+        data=Record(sender, receiver, float(amount)),
         creator_id=42,
         prev_hash=prev_block_hash
     )
