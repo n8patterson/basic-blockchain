@@ -26,6 +26,15 @@ Before running the application first install the following dependencies.
 
 ## Examples
 
+How to run code using streamlit from terminal
+
+![Example streamlit](./Resources/terminal-example.gif)
+
+
+Example of entire program adding multiple blocks to the blockchain and validating the entire blockchain
+
+![Program example](./Resources/program-example.gif) 
+
 ---
 
 ## Contributors 
